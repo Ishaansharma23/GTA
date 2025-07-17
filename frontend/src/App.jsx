@@ -34,12 +34,46 @@ const App = () => {
   })
 
   useGSAP(() =>{
+    if(!showContent) return; 
+
+    gsap.to(".main" , {
+      scale: 1,
+      rotate: 0,
+      delay:"-.6",
+      duration: 2,
+      ease: "Expo.easeInOut"
+    })
+    gsap.to(".sky" , {
+      scale: 1.1,
+      rotate: 0,
+      delay:"-.8",
+      duration: 2,
+      ease: "Expo.easeInOut"
+    })
+    
+    gsap.to(".bg" , {
+      scale: 1.1,
+      rotate: 0,
+      delay:"-.8",
+      duration: 2,
+      ease: "Expo.easeInOut"
+    })
+
     const main = document.querySelector('.main');
 
     main?.addEventListener("mousemove", function(e){
       const Xmove = (e.clientX/innerWidth - .5) * 40;
+      gsap.to(".imagesdiv .text", {
+        x: `${Xmove * 0.4}%`// .4 taki hum km move kr ske text ko 
+      })
+      gsap.to(".sky", {
+        x: Xmove
+      })
+      gsap.to(".bg", {
+        x: Xmove * 1.7,
+      })
     })
-  }, [showContent])
+  }, [showContent]) 
 
   return (
     <>
@@ -73,7 +107,7 @@ const App = () => {
         </svg>
       </div>
       {showContent && (
-        <div className='main w-full'>
+        <div className='main w-full rotate-[-10deg] scale-[1.7]'>
           <div className='landing w-full h-screen bg-black'>
             <div className='navbar absolute top-0 left-0 z-[10] w-full p-10'>
               <div className="logo flex gap-5">
@@ -86,15 +120,15 @@ const App = () => {
               </div>
             </div>
             <div className='imagesdiv overflow-hidden w-full h-screen relative'>
-              <img className='absolute top-0 left-0 w-full h-full object-cover' src="./sky.png" alt="" />
-              <img className='absolute top-0 left-0 w-full h-full object-cover' src="./bg.png" />
+              <img className='sky scale-[1.4] rotate-[-20deg] absolute top-0 left-0 w-full h-full object-cover' src="./sky.png" alt="" />
+              <img className='bg scale-[1.8] rotate-[-3deg] absolute top-0 left-0 w-full h-full object-cover' src="./bg.png" />
               <div className="text absolute flex flex-col gap-3 top-7 left-1/2 -translate-x-1/2 font-['pricedown'] text-white">
               <h1 className='text-[10rem] leading-none -ml-20'>theft</h1>
               <h1 className='text-[10rem] leading-none ml-20'>grand</h1>
               <h1 className='text-[10rem] leading-none -ml-20'>auto</h1>
             </div>
               <img
-                className=" absolute -bottom-[50%] left-1/2 -translate-x-1/2 scale-[.8]"
+                className="character absolute -bottom-[50%] left-1/2 -translate-x-1/2 scale-[.8]"
                 src="./girlbg.png"
               />
             </div>
