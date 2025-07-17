@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { useGSAP } from '@gsap/react'
-import gsap from 'gsap'
-import 'remixicon/fonts/remixicon.css'
+import React, { useState, useEffect } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import 'remixicon/fonts/remixicon.css';
 
 const App = () => {
-
-  let [showContent, setShowContent] = useState(false)
+  const [showContent, setShowContent] = useState(false);
+  const [hasClicked, setHasClicked] = useState(false);
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -30,50 +30,56 @@ const App = () => {
             this.kill();
           }
         }
-      })
-  })
+      });
+  });
 
-  useGSAP(() =>{
-    if(!showContent) return; 
+  // 🔑 ✅ Listen for first click anywhere
+  useEffect(() => {
+    const handleClick = () => setHasClicked(true);
+    window.addEventListener('click', handleClick);
+    return () => window.removeEventListener('click', handleClick);
+  }, []);
 
-    gsap.to(".main" , {
-      scale: 1,
-      rotate: 0,
-      delay:"-.6",
-      duration: 2,
-      ease: "Expo.easeInOut"
-    })
-    gsap.to(".sky" , {
-      scale: 1.1,
-      rotate: 0,
-      delay:"-.8",
-      duration: 2,
-      ease: "Expo.easeInOut"
-    })
-    
-    gsap.to(".bg" , {
-      scale: 1.1,
-      rotate: 0,
-      delay:"-.8",
-      duration: 2,
-      ease: "Expo.easeInOut"
-    })
+  // ✅ When both true → play
+  useEffect(() => {
+    if (showContent && hasClicked) {
+      const audio = document.getElementById('bg-music');
+      audio?.play().catch(err => {
+        console.log('Play blocked:', err);
+      });
 
-    const main = document.querySelector('.main');
-
-    main?.addEventListener("mousemove", function(e){
-      const Xmove = (e.clientX/innerWidth - .5) * 40;
-      gsap.to(".imagesdiv .text", {
-        x: `${Xmove * 0.4}%`// .4 taki hum km move kr ske text ko 
-      })
+      // Your GSAP after mask animation
+      gsap.to(".main", {
+        scale: 1,
+        rotate: 0,
+        delay: "-.6",
+        duration: 2,
+        ease: "Expo.easeInOut"
+      });
       gsap.to(".sky", {
-        x: Xmove
-      })
+        scale: 1.1,
+        rotate: 0,
+        delay: "-.8",
+        duration: 2,
+        ease: "Expo.easeInOut"
+      });
       gsap.to(".bg", {
-        x: Xmove * 1.7,
-      })
-    })
-  }, [showContent]) 
+        scale: 1.1,
+        rotate: 0,
+        delay: "-.8",
+        duration: 2,
+        ease: "Expo.easeInOut"
+      });
+
+      const main = document.querySelector('.main');
+      main?.addEventListener("mousemove", function (e) {
+        const Xmove = (e.clientX / innerWidth - .5) * 40;
+        gsap.to(".imagesdiv .text", { x: `${Xmove * 0.4}%` });
+        gsap.to(".sky", { x: Xmove });
+        gsap.to(".bg", { x: Xmove * 1.7 });
+      });
+    }
+  }, [showContent, hasClicked]);
 
   return (
     <>
@@ -106,8 +112,11 @@ const App = () => {
           />
         </svg>
       </div>
+
       {showContent && (
         <div className='main w-full rotate-[-10deg] scale-[1.7]'>
+          <audio id="bg-music" src="/gta.mp3" loop></audio>
+
           <div className='landing w-full h-screen bg-black'>
             <div className='navbar absolute top-0 left-0 z-[10] w-full p-10'>
               <div className="logo flex gap-5">
@@ -123,29 +132,26 @@ const App = () => {
               <img className='sky scale-[1.4] rotate-[-20deg] absolute top-0 left-0 w-full h-full object-cover' src="./sky.png" alt="" />
               <img className='bg scale-[1.8] rotate-[-3deg] absolute top-0 left-0 w-full h-full object-cover' src="./bg.png" />
               <div className="text absolute flex flex-col gap-3 top-7 left-1/2 -translate-x-1/2 font-['pricedown'] text-white">
-              <h1 className='text-[10rem] leading-none -ml-20'>theft</h1>
-              <h1 className='text-[10rem] leading-none ml-20'>grand</h1>
-              <h1 className='text-[10rem] leading-none -ml-20'>auto</h1>
-            </div>
-              <img
-                className="character absolute -bottom-[50%] left-1/2 -translate-x-1/2 scale-[.8]"
-                src="./girlbg.png"
-              />
+                <h1 className='text-[10rem] leading-none -ml-20'>theft</h1>
+                <h1 className='text-[10rem] leading-none ml-20'>grand</h1>
+                <h1 className='text-[10rem] leading-none -ml-20'>auto</h1>
+              </div>
+              <img className="character absolute -bottom-[50%] left-1/2 -translate-x-1/2 scale-[.8]" src="./girlbg.png" />
             </div>
             <div className="btmbar text-white absolute bottom-0 left-0 w-full px-10 py-13 bg-gradient-to-t from-black to-transparent">
               <div className='flex gap-4 items-center'>
-              <i className="ri-arrow-down-line text-3xl"></i>
-              <h3 className=' text-xl font-["Helvetica_Now_Display"]'>Scroll Down</h3>
+                <i className="ri-arrow-down-line text-3xl"></i>
+                <h3 className='text-xl font-["Helvetica_Now_Display"]'>Scroll Down</h3>
               </div>
               <div>
-                <img className='h-[45px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' src="./ps5.png"/>
+                <img className='h-[45px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' src="./ps5.png" />
               </div>
             </div>
           </div>
         </div>
       )}
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
