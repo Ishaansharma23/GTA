@@ -5,7 +5,7 @@ import 'remixicon/fonts/remixicon.css'
 
 const App = () => {
 
-  const [showContent, setShowContent] = useState(false)
+  let [showContent, setShowContent] = useState(false)
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -32,6 +32,14 @@ const App = () => {
         }
       })
   })
+
+  useGSAP(() =>{
+    const main = document.querySelector('.main');
+
+    main?.addEventListener("mousemove", function(e){
+      const Xmove = (e.clientX/innerWidth - .5) * 40;
+    })
+  }, [showContent])
 
   return (
     <>
@@ -80,15 +88,23 @@ const App = () => {
             <div className='imagesdiv overflow-hidden w-full h-screen relative'>
               <img className='absolute top-0 left-0 w-full h-full object-cover' src="./sky.png" alt="" />
               <img className='absolute top-0 left-0 w-full h-full object-cover' src="./bg.png" />
+              <div className="text absolute flex flex-col gap-3 top-7 left-1/2 -translate-x-1/2 font-['pricedown'] text-white">
+              <h1 className='text-[12rem] leading-none -ml-20'>theft</h1>
+              <h1 className='text-[12rem] leading-none ml-20'>grand</h1>
+              <h1 className='text-[12rem] leading-none -ml-20'>auto</h1>
+            </div>
               <img
                 className=" absolute -bottom-[50%] left-1/2 -translate-x-1/2 scale-[.8]"
                 src="./girlbg.png"
               />
             </div>
-            <div className="btmbar text-white absolute bottom-0 left-0 w-full p-10 bg-gradient-to-t from-black to-transparent">
-              <div className='flex gap-4'>
-              <i class="ri-arrow-down-line text-4xl"></i>
-              <h3 className=' text-4xl font-[Helvetica_Now_Display'>Scroll Down</h3>
+            <div className="btmbar text-white absolute bottom-0 left-0 w-full px-10 py-13 bg-gradient-to-t from-black to-transparent">
+              <div className='flex gap-4 items-center'>
+              <i className="ri-arrow-down-line text-3xl"></i>
+              <h3 className=' text-xl font-[Helvetica_Now_Display'>Scroll Down</h3>
+              </div>
+              <div>
+                <img className='h-[45px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2' src="./ps5.png"/>
               </div>
             </div>
           </div>
